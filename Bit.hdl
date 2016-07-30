@@ -9,12 +9,29 @@
  *                 else out does not change (out[t+1] = out[t])
  */
 
+// out[t] = in[t-1]load[t-1] + out[t-1]not(load[t-1])
+
 CHIP Bit {
     IN in, load;
     OUT out;
 
     PARTS:
     // Put your code here:
-    Mux(a = another, b = in, sel = load, out = muxInAndLoad);
-    DFF(in = muxInAndLoad, out = out, out = another);
+//    Mux(a = another, b = in, sel = load, out = muxInAndLoad);
+//    DFF(in = muxInAndLoad, out = out, out = another);
+
+      DFF(in = in, out = inOld);
+      DFF(in = load, out = loadOld);
+
+      And(a = inOld, b = loadOld, out = inOldAndLoadOld);
+
+      Not(in = loadOld, out = notLoadOld);
+
+      Or(a = inOldAndLoadOld, b = someOutOldAndNotLoad, out = out, out = someOut);
+
+      DFF(in = someOut, out = someOutOld);
+
+      And(a = someOutOld, b = notLoadOld, out = someOutOldAndNotLoad);
+
+
 }
