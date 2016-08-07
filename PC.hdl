@@ -13,14 +13,14 @@
 
 /*
 | l | i | r | o/p |
-  0   0	  0   oD 
+  0   0	  0   delayedOutput
   0   0	  1   false
-  0   1	  0   oD + 1
-  0   1	  1   x
-  1   0	  0   in
-  1   0	  1
-  1   1	  0
-  1   1	  1
+  0   1	  0   delayedOutput + 1
+  0   1	  1   false
+  1   0	  0   delayedInput
+  1   0	  1   false
+  1   1	  0   delayedInput
+  1   1	  1   false
 */
 
 CHIP PC {
@@ -30,5 +30,5 @@ CHIP PC {
     PARTS:
     Register(in = outCopy, load = true, out = outDelayed, out = out); // Could have used a DFF but it only works for a one bit and not 16-bit word.
     Inc16(in = outDelayed, out = incOutDelayed);
-    Mux8Way16(a = outDelayed, b = false, c = incOutDelayed, d = outDelayed, e = in, f = outDelayed, g = outDelayed, h = outDelayed, sel[2] = load, sel[1] = inc, sel[0] = reset, out = outMux, out = outCopy);
+    Mux8Way16(a = outDelayed, b = false, c = incOutDelayed, d = false, e = in, f = false, g = in, h = false, sel[2] = load, sel[1] = inc, sel[0] = reset, out = outMux, out = outCopy);
 }
